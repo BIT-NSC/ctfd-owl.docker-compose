@@ -1,0 +1,21 @@
+version: "3"
+services:
+    service:
+        image: python:3.8-alpine
+        volumes:
+            - ./src:/app
+            - "$PWD/flag:/fl0g:ro"
+        restart: always
+        environment: 
+            TZ: Asia/Shanghai
+        expose:
+            - "8080"
+        command: python3 /app/main.py
+        networks:
+            - net
+
+networks:
+    # 配置docker network
+    net: 
+      external: 
+         name: bitnsc_frp_containers

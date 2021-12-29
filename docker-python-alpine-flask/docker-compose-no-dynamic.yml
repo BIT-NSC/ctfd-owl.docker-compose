@@ -1,0 +1,19 @@
+version: "3"
+services:
+    flask:
+        image: spaceskynet/python3.8-flask-alpine
+        build: ./flask
+        volumes:
+            - ./www:/app
+            - "$PWD/flag:/app/fl0g:ro"
+        restart: always
+        environment: 
+            TZ: Asia/Shanghai
+        ports:
+            - "9999:8000"
+        networks:
+            - default
+
+networks:
+    # 配置docker network
+    default:

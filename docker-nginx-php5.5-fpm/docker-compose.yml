@@ -1,0 +1,39 @@
+version: "3"
+services:
+    service:  # nginx 之类服务的名称必须为 service
+        image: nginx:latest
+        volumes:
+            - ./nginx:/etc/nginx/conf.d
+            - ./www:/var/www/html
+            # nginx和php必须同时映射才能通信
+        restart: always
+        environment: 
+            TZ: Asia/Shanghai
+        expose:
+            - "80"
+        networks:
+            - default
+            - net
+    
+    php:
+        image: spaceskynet/php5.5-fpm
+        build: ./php
+        volumes: 
+            - ./php/php5-fpm/php.ini:/etc/php5/fpm/php.ini
+            - ./php/php5-fpm/php-fpm.conf:/etc/php5/fpm/php-fpm.conf
+            - ./php/php5-fpm/pool.d/www.conf:/etc/php5/fpm/pool.d/www.conf 
+            - ./www:/var/www/html
+            - "$PWD/flag:/fl0g:ro"
+            # nginx和php必须同时映射才能通信      
+        environment: 
+            TZ: Asia/Shanghai
+        restart: always
+        networks:
+            - default
+
+networks:
+    # 配置docker network
+    default:
+    net:  
+      external: 
+         name: bitnsc_frp_containers

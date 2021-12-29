@@ -1,0 +1,60 @@
+version: "3"
+services:
+    service:  # nginx 之类服务的名称必须为 service
+        image: nginx:latest
+        volumes:
+            - ./nginx:/etc/nginx/conf.d
+            - ./www:/var/www/html
+            # nginx和php必须同时映射才能通信
+        restart: always
+        environment: 
+            TZ: Asia/Shanghai
+        expose:
+            - "80"
+        networks:
+            - default
+            - net
+    
+    php:
+        image: xiabee/php7.3-fpm
+        build: ./php
+        volumes: 
+            - ./php/php.ini:/usr/local/etc/php/php.ini
+            - ./php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
+            - ./www:/var/www/html
+            # nginx和php必须同时映射才能通信      
+        environment: 
+            TZ: Asia/Shanghai
+        restart: always
+        networks:
+            - default
+    mariadb:
+        # 选中mariadb的最新版本
+        image: mariadb:latest
+        # 端口
+        ports:
+            - "3306:3306"
+        #映射本地 当前目录下mysql文件夹持久化
+        volumes:
+            - ./mysql:/var/lib/mysql
+        #环境变量设置用户名密码
+        environment:
+            - MYSQL_ROOT_PASSWORD=root  #这里设置root密码
+            - MYSQL_USER=bitisl         #这里设置普通用户
+            - MYSQL_PASSWORD=123456     #这里设置普通用户密码
+            - MYSQL_DATABASE=test
+
+        #这里使用命令登陆，删除后可能于新版mysql不兼容
+        command: [--default-authentication-plugin=mysql_native_password, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]
+        #挂掉自动重启
+        restart: always
+        networks:
+            - default
+
+
+networks:
+    # 配置docker network
+    default:
+    net: 
+      external: 
+         name: bitnsc_frp_containers

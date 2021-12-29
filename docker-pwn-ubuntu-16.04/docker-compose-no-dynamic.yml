@@ -1,0 +1,20 @@
+version: "3"
+services:
+  service:
+    build:
+      context: .
+    image: spaceskynet/pwn_ubuntu_problem:16.04
+    volumes:
+      - ./tcpdump:/var/lib/tcpdump
+      - "$PWD/src/pwn:/home/ctf/pwn"
+      - "$PWD/flag:/home/ctf/flag:ro"
+    ports:
+      - "9999:10000"
+    environment:
+      - TCPDUMP_ENABLE=0
+    networks:
+        - default
+
+networks:
+    # 配置docker network
+    default:

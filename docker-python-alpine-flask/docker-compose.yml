@@ -1,0 +1,21 @@
+version: "3"
+services:
+    service:
+        image: spaceskynet/python3.8-flask-alpine
+        build: ./flask
+        volumes:
+            - ./www:/app
+            - "$PWD/flag:/app/fl0g:ro"
+        restart: always
+        environment: 
+            TZ: Asia/Shanghai
+        expose:
+            - "8000"
+        networks:
+            - net
+
+networks:
+    # 配置docker network
+    net: 
+      external: 
+         name: bitnsc_frp_containers
