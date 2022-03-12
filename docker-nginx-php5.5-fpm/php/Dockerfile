@@ -1,5 +1,4 @@
 FROM ubuntu:14.04
-MAINTAINER Stanislav Vitko <stanislav.vitko@gmail.com>
 
 # install packages
 RUN sed -i "s/archive.ubuntu.com/mirrors.bit.edu.cn/g" /etc/apt/sources.list && \
