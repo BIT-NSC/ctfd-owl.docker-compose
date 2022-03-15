@@ -2,7 +2,7 @@ FROM php:7.3-fpm
 
 RUN sed -i "s/deb.debian.org/mirrors.bit.edu.cn/g" /etc/apt/sources.list && \
     sed -i "s/security.debian.org/mirrors.bit.edu.cn/g" /etc/apt/sources.list && \
-    && apt-get update && apt-get install -y --no-install-recommends \
+    apt-get update && apt-get install -y --no-install-recommends \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     libgmp-dev \
     libbz2-dev \
